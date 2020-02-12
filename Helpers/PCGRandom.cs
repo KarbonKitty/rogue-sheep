@@ -39,7 +39,7 @@ namespace RogueSheep.Helpers
                 uint next = Next();
                 if (next > threshold)
                 {
-                    return next % threshold;
+                    return next % maxValue;
                 }
             }
         }
