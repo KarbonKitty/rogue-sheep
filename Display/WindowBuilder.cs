@@ -6,16 +6,16 @@ namespace RogueSheep
 {
     public static class WindowBuilder
     {
-        public static RenderWindow CreateWindow(string title)
+        public static RenderWindow CreateWindow(string title, uint width, uint height)
         {
             var videoMode = new VideoMode(
-                DisplayConsts.WindowWidthPx,
-                DisplayConsts.WindowHeightPx,
+                width,
+                height,
                 DisplayConsts.BitDepth);
 
             var contextSettings = new ContextSettings
             {
-                DepthBits = 32
+                DepthBits = DisplayConsts.BitDepth
             };
 
             var window = new RenderWindow(

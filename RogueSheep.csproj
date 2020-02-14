@@ -11,10 +11,12 @@
 
   <ItemGroup>
     <Content Remove="data/font16x16.png" />
+    <Content Remove="data/font10x16.png" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="data/font16x16.png" />
+    <EmbeddedResource Include="data/font10x16.png" />
   </ItemGroup>
 
 </Project>

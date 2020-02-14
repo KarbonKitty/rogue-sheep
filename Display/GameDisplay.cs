@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,11 +12,14 @@ namespace RogueSheep
         private readonly Tilemap tilemap;
         private readonly GameTile[] tiles;
         private readonly int width;
-        private readonly int fontSize = 16;
+        private readonly int fontWidth = 10;
+        private readonly int fontHeight = 16;
 
-        public GameDisplay(Vector2i size)
+        public GameDisplay(Vector2i size, int fontWidth, int fontHeight)
         {
-            tilemap = CreateTilemap();
+            this.fontWidth = fontWidth;
+            this.fontHeight = fontHeight;
+            tilemap = CreateTilemap(fontWidth, fontHeight);
             tiles = new GameTile[size.X * size.Y];
             width = size.X;
             Clear();
@@ -89,15 +93,23 @@ namespace RogueSheep
 
         private Vector2f IndexToVector(int index)
         {
-            return new Vector2f((index % width) * fontSize, (index / width) * fontSize);
+            return new Vector2f((index % width) * fontWidth, (index / width) * fontHeight);
         }
 
-        private static Tilemap CreateTilemap()
+        private static Tilemap CreateTilemap(int fontWidth, int fontHeight)
         {
             var assembly = typeof(GameDisplay).Assembly;
-            Stream font = assembly.GetManifestResourceStream("RogueSheep.data.font16x16.png");
-
-            return new Tilemap(font, DisplayConsts.FONT_SIZE, DisplayConsts.FONT_COUNT);
+            var resourceName = $"RogueSheep.data.font{fontWidth}x{fontHeight}.png";
+            try
+            {
+                Stream font = assembly.GetManifestResourceStream(resourceName);
+                return new Tilemap(font, fontWidth, fontHeight, DisplayConsts.FONT_COUNT);
+            }
+            catch
+            {
+                // add actual error logging?
+                throw;
+            }
         }
     }
 }

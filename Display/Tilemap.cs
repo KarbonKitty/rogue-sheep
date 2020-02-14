@@ -10,7 +10,7 @@ namespace RogueSheep
         public Sprite this[int index] => Glyphs[index];
         public Sprite this[SpriteEnum index] => Glyphs[(int)index];
 
-        public Tilemap(Stream data, int spriteSize, int spriteCount)
+        public Tilemap(Stream data, int spriteWidth, int spriteHeight, int spriteCount)
         {
             var g = new Sprite[spriteCount * spriteCount];
             var t = new Texture(data);
@@ -19,7 +19,7 @@ namespace RogueSheep
             {
                 for (var j = 0; j < spriteCount; j++)
                 {
-                    var rect = new IntRect(i * spriteSize, j * spriteSize, spriteSize, spriteSize);
+                    var rect = new IntRect(i * spriteWidth, j * spriteHeight, spriteWidth, spriteHeight);
                     g[j * spriteCount + i] = new Sprite(t, rect);
                 }
             }
