@@ -1,37 +1,37 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using SFML.Graphics;
-using SFML.System;
 
 namespace RogueSheep
 {
     public class GameDisplay
     {
+        public Point2i Offset { get; }
         private readonly Tilemap tilemap;
         private readonly GameTile[] tiles;
         private readonly int width;
-        private readonly int fontWidth = 10;
-        private readonly int fontHeight = 16;
+        private readonly int fontWidth;
+        private readonly int fontHeight;
 
-        public GameDisplay(Vector2i size, int fontWidth, int fontHeight)
+        public GameDisplay(Point2i size, Point2i offset, int fontWidth, int fontHeight)
         {
             this.fontWidth = fontWidth;
             this.fontHeight = fontHeight;
             tilemap = CreateTilemap(fontWidth, fontHeight);
             tiles = new GameTile[size.X * size.Y];
             width = size.X;
+            Offset = offset;
             Clear();
         }
 
-        public void Draw(GameTile tile, Vector2i position)
+        public void Draw(GameTile tile, Point2i position)
         {
             var i = VectorToIndex(position);
             this.tiles[i] = tile;
         }
 
-        public void Draw(IList<GameTile> tiles, Vector2i position)
+        public void Draw(IList<GameTile> tiles, Point2i position)
         {
             var i = VectorToIndex(position);
             foreach (var tile in tiles)
@@ -40,7 +40,7 @@ namespace RogueSheep
             }
         }
 
-        public void Draw(IList<GameTile> tiles, Vector2i position, int lineLength)
+        public void Draw(IList<GameTile> tiles, Point2i position, int lineLength)
         {
             var i = VectorToIndex(position);
             var column = 0;
@@ -57,7 +57,7 @@ namespace RogueSheep
             }
         }
 
-        public void Draw(string data, Vector2i position, Color? foreground = null, Color? background = null)
+        public void Draw(string data, Point2i position, Color? foreground = null, Color? background = null)
         {
             var fg = foreground ?? Color.White;
             var bg = background ?? Color.Black;
@@ -86,14 +86,14 @@ namespace RogueSheep
             }
         }
 
-        private int VectorToIndex(Vector2i vector)
+        private int VectorToIndex(Point2i vector)
         {
             return (vector.Y * width) + vector.X;
         }
 
-        private Vector2f IndexToVector(int index)
+        private Point2f IndexToVector(int index)
         {
-            return new Vector2f((index % width) * fontWidth, (index / width) * fontHeight);
+            return new Point2f((index % width * fontWidth) + Offset.X, (index / width * fontHeight) + Offset.Y);
         }
 
         private static Tilemap CreateTilemap(int fontWidth, int fontHeight)

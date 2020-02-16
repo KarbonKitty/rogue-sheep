@@ -1,10 +1,7 @@
 namespace RogueSheep
 {
-    public static class DisplayConsts
+    internal static class DisplayConsts
     {
-        public const int WINDOW_HEIGHT = 50;
-        public const int WINDOW_WIDTH = 80;
-
         public const int FONT_COUNT = 16;
 
         public static readonly uint BitDepth = 32;
