@@ -20,7 +20,7 @@ namespace RogueSheep
                 for (var j = 0; j < spriteCount; j++)
                 {
                     var rect = new IntRect(i * spriteWidth, j * spriteHeight, spriteWidth, spriteHeight);
-                    g[j * spriteCount + i] = new Sprite(t, rect);
+                    g[(j * spriteCount) + i] = new Sprite(t, rect);
                 }
             }
 

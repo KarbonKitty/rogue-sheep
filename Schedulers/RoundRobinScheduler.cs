@@ -6,7 +6,7 @@ namespace RogueSheep.Schedulers
 {
     public class RoundRobinScheduler<T> : IScheduler<T>
     {
-        private List<T> list;
+        private readonly List<T> list;
         private int lastIndex = 0;
 
         public RoundRobinScheduler()
@@ -16,7 +16,7 @@ namespace RogueSheep.Schedulers
 
         public T Next()
         {
-            if (!list.Any())
+            if (list.Count == 0)
             {
                 throw new InvalidOperationException("Next can only be called on non-empty scheduler");
             }

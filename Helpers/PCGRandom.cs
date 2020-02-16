@@ -17,7 +17,7 @@ namespace RogueSheep.Helpers
     */
     public class PCGRandom
     {
-        private PCGRandomMinimal innerPCG;
+        private readonly PCGRandomMinimal innerPCG;
 
         public PCGRandom(ulong initState, ulong initStream)
         {
@@ -67,7 +67,7 @@ namespace RogueSheep.Helpers
             {
                 throw new ArgumentOutOfRangeException(nameof(maxValue));
             }
-            
+
             return (int)Next((uint)maxValue);
         }
 

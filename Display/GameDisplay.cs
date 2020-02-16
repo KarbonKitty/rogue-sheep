@@ -88,7 +88,7 @@ namespace RogueSheep
 
         private int VectorToIndex(Vector2i vector)
         {
-            return vector.Y * width + vector.X;
+            return (vector.Y * width) + vector.X;
         }
 
         private Vector2f IndexToVector(int index)

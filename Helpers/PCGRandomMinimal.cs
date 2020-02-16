@@ -16,7 +16,7 @@ namespace RogueSheep.Helpers
     public class PCGRandomMinimal
     {
         private ulong state;
-        private ulong stream;
+        private readonly ulong stream;
 
         public PCGRandomMinimal(ulong initState, ulong initStream)
         {
@@ -30,7 +30,7 @@ namespace RogueSheep.Helpers
         public uint Next()
         {
             ulong oldState = state;
-            state = oldState * 6364136223846793005 + stream;
+            state = (oldState * 6364136223846793005) + stream;
             uint xorshifted = (uint)(((oldState >> 18) ^ oldState) >> 27);
             uint rot = (uint)(oldState >> 59);
             return (xorshifted >> (int)rot) | (xorshifted << ((int)(-rot) & 31));
