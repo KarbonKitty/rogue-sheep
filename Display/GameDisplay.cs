@@ -8,9 +8,10 @@ namespace RogueSheep
     public class GameDisplay
     {
         public Point2i Offset { get; }
+        public Point2i Size { get; }
+        public Point2i SizePx { get; }
         private readonly Tilemap tilemap;
         private readonly GameTile[] tiles;
-        private readonly int width;
         private readonly int fontWidth;
         private readonly int fontHeight;
 
@@ -20,7 +21,8 @@ namespace RogueSheep
             this.fontHeight = fontHeight;
             tilemap = CreateTilemap(fontWidth, fontHeight);
             tiles = new GameTile[size.X * size.Y];
-            width = size.X;
+            Size = size;
+            SizePx = (size.X * fontWidth, size.Y * fontHeight);
             Offset = offset;
             Clear();
         }
@@ -51,7 +53,7 @@ namespace RogueSheep
                 if (column == lineLength)
                 {
                     i -= column;
-                    i += width;
+                    i += Size.X;
                     column = 0;
                 }
             }
@@ -88,12 +90,12 @@ namespace RogueSheep
 
         private int VectorToIndex(Point2i vector)
         {
-            return (vector.Y * width) + vector.X;
+            return (vector.Y * Size.X) + vector.X;
         }
 
         private Point2f IndexToVector(int index)
         {
-            return new Point2f((index % width * fontWidth) + Offset.X, (index / width * fontHeight) + Offset.Y);
+            return new Point2f((index % Size.X * fontWidth) + Offset.X, (index / Size.X * fontHeight) + Offset.Y);
         }
 
         private static Tilemap CreateTilemap(int fontWidth, int fontHeight)
