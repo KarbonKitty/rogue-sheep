@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace RogueSheep.Schedulers
 {
     public class RoundRobinScheduler<T> : IScheduler<T>
     {
         private readonly List<T> list;
-        private int lastIndex = 0;
+        private int lastIndex = -1;
 
         public RoundRobinScheduler()
         {
+            // TODO: think about the default size here
             list = new List<T>(32);
         }
 
