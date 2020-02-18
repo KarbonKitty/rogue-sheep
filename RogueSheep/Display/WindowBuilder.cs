@@ -6,16 +6,19 @@ namespace RogueSheep
 {
     public static class WindowBuilder
     {
+        private const int BitDepth = 24;
+        private const int FrameLimit = 60;
+
         public static RenderWindow CreateWindow(string title, uint width, uint height)
         {
             var videoMode = new VideoMode(
                 width,
                 height,
-                DisplayConsts.BitDepth);
+                BitDepth);
 
             var contextSettings = new ContextSettings
             {
-                DepthBits = DisplayConsts.BitDepth
+                DepthBits = BitDepth
             };
 
             var window = new RenderWindow(
@@ -24,7 +27,7 @@ namespace RogueSheep
                 Styles.Titlebar | Styles.Close,
                 contextSettings);
 
-            window.SetFramerateLimit(60);
+            window.SetFramerateLimit(FrameLimit);
 
             //registering event handlers
             window.Closed += Window_Close;

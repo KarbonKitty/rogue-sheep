@@ -100,12 +100,15 @@ namespace RogueSheep
 
         private static Tilemap CreateTilemap(int fontWidth, int fontHeight)
         {
+            const int fontRows = 16;
+            const int fontColumns = 16;
+
             var assembly = typeof(GameDisplay).Assembly;
             var resourceName = $"RogueSheep.data.font{fontWidth}x{fontHeight}.png";
             try
             {
                 Stream font = assembly.GetManifestResourceStream(resourceName);
-                return new Tilemap(font, fontWidth, fontHeight, DisplayConsts.FONT_COUNT);
+                return new Tilemap(font, fontWidth, fontHeight, fontRows, fontColumns);
             }
             catch
             {
