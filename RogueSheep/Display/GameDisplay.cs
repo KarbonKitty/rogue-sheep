@@ -19,7 +19,7 @@ namespace RogueSheep
         {
             this.fontWidth = fontWidth;
             this.fontHeight = fontHeight;
-            tilemap = CreateTilemap(fontWidth, fontHeight);
+            tilemap = new TilemapFactory().CreateTilemapFromResource(fontWidth, fontHeight, 16, 16);
             tiles = new GameTile[size.X * size.Y];
             Size = size;
             SizePx = (size.X * fontWidth, size.Y * fontHeight);
@@ -96,25 +96,6 @@ namespace RogueSheep
         private Point2f IndexToVector(int index)
         {
             return new Point2f((index % Size.X * fontWidth) + Offset.X, (index / Size.X * fontHeight) + Offset.Y);
-        }
-
-        private static Tilemap CreateTilemap(int fontWidth, int fontHeight)
-        {
-            const int fontRows = 16;
-            const int fontColumns = 16;
-
-            var assembly = typeof(GameDisplay).Assembly;
-            var resourceName = $"RogueSheep.data.font{fontWidth}x{fontHeight}.png";
-            try
-            {
-                Stream font = assembly.GetManifestResourceStream(resourceName);
-                return new Tilemap(font, fontWidth, fontHeight, fontRows, fontColumns);
-            }
-            catch
-            {
-                // add actual error logging?
-                throw;
-            }
         }
     }
 }
