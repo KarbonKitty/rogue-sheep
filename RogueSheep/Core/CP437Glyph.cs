@@ -1,6 +1,6 @@
 namespace RogueSheep
 {
-    public enum SpriteEnum
+    public enum CP437Glyph
     {
         //tier 1
         Empty = 0,

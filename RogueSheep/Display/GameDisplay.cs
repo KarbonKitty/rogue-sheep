@@ -1,25 +1,26 @@
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+
 using SFML.Graphics;
 
-namespace RogueSheep
+namespace RogueSheep.Display
 {
     public class GameDisplay
     {
         public Point2i Offset { get; }
         public Point2i Size { get; }
         public Point2i SizePx { get; }
-        private readonly Tilemap tilemap;
+        private readonly ITilemap tilemap;
         private readonly GameTile[] tiles;
         private readonly int fontWidth;
         private readonly int fontHeight;
 
-        public GameDisplay(Point2i size, Point2i offset, int fontWidth, int fontHeight)
+        public GameDisplay(Point2i size, Point2i offset, ITilemapConfiguration tilemapConfiguration)
         {
-            this.fontWidth = fontWidth;
-            this.fontHeight = fontHeight;
-            tilemap = CreateTilemap(fontWidth, fontHeight);
+            this.fontWidth = tilemapConfiguration.SpriteWidth;
+            this.fontHeight = tilemapConfiguration.SpriteHeight;
+            tilemap = new TilemapFactory().CreateTilemap(tilemapConfiguration);
             tiles = new GameTile[size.X * size.Y];
             Size = size;
             SizePx = (size.X * fontWidth, size.Y * fontHeight);
@@ -64,7 +65,7 @@ namespace RogueSheep
             var fg = foreground ?? Color.White;
             var bg = background ?? Color.Black;
 
-            Draw(data.Select(c => new GameTile((SpriteEnum)c, fg, bg)).ToList(), position);
+            Draw(data.Select(c => new GameTile((CP437Glyph)c, fg, bg)).ToList(), position);
         }
 
         public void DrawToWindow(RenderWindow window)
@@ -84,7 +85,7 @@ namespace RogueSheep
         {
             for (var i = 0; i < tiles.Length; i++)
             {
-                tiles[i] = new GameTile(SpriteEnum.Empty);
+                tiles[i] = new GameTile(CP437Glyph.Empty);
             }
         }
 
@@ -96,25 +97,6 @@ namespace RogueSheep
         private Point2f IndexToVector(int index)
         {
             return new Point2f((index % Size.X * fontWidth) + Offset.X, (index / Size.X * fontHeight) + Offset.Y);
-        }
-
-        private static Tilemap CreateTilemap(int fontWidth, int fontHeight)
-        {
-            const int fontRows = 16;
-            const int fontColumns = 16;
-
-            var assembly = typeof(GameDisplay).Assembly;
-            var resourceName = $"RogueSheep.data.font{fontWidth}x{fontHeight}.png";
-            try
-            {
-                Stream font = assembly.GetManifestResourceStream(resourceName);
-                return new Tilemap(font, fontWidth, fontHeight, fontRows, fontColumns);
-            }
-            catch
-            {
-                // add actual error logging?
-                throw;
-            }
         }
     }
 }

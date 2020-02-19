@@ -2,8 +2,9 @@ using System;
 using SFML.Graphics;
 using SFML.Window;
 
-namespace RogueSheep
+namespace RogueSheep.Display
 {
+    // TODO: wrap RenderWindow in some RogueSheep class
     public static class WindowBuilder
     {
         private const int BitDepth = 24;
