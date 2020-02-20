@@ -7,9 +7,9 @@ namespace RogueSheep.Tests
 {
     public class RoundRobinSchedulerTests
     {
-        private string First = "first";
-        private string Second = "second";
-        private string Third = "third";
+        private const string First = "first";
+        private const string Second = "second";
+        private const string Third = "third";
 
         [Fact]
         public void RoundRobinScheduler_KeepsSequence()
