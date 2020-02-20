@@ -43,6 +43,9 @@ namespace RogueSheep
         public static bool operator ==(Point2i a, Point2i b) => a.X == b.X && a.Y == b.Y;
         public static bool operator !=(Point2i a, Point2i b) => !(a == b);
 
+        public static Point2i operator +(Point2i a, Point2i b) => new Point2i(a.X + b.X, a.Y + b.Y);
+        public static Point2i operator -(Point2i a, Point2i b) => new Point2i(a.X - b.X, a.Y - b.Y);
+
         public override bool Equals(object? obj) => obj is Point2i position && Equals(position);
 
         public bool Equals(Point2i gamePosition) => gamePosition.X == X && gamePosition.Y == Y;
@@ -89,6 +92,9 @@ namespace RogueSheep
         public static implicit operator Vector2f(Point2f position) => new Vector2f(position.X, position.Y);
         public static bool operator ==(Point2f a, Point2f b) => a.X == b.X && a.Y == b.Y;
         public static bool operator !=(Point2f a, Point2f b) => !(a == b);
+
+        public static Point2f operator +(Point2f a, Point2f b) => new Point2f(a.X + b.X, a.Y + b.Y);
+        public static Point2f operator -(Point2f a, Point2f b) => new Point2f(a.X - b.X, a.Y - b.Y);
 
         public override bool Equals(object? obj) => obj is Point2f position && Equals(position);
 
