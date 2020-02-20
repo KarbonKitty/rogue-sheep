@@ -66,7 +66,7 @@ namespace RogueSheep.Messaging
                     line.Clear();
                 }
 
-                line.Append($" {words[wordIndex]}");
+                line.Append(' ').Append(words[wordIndex]);
             }
 
             lines.Add(line.ToString().Trim());
