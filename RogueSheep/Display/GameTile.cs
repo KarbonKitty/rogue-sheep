@@ -1,4 +1,3 @@
-using System;
 using SFML.Graphics;
 
 namespace RogueSheep.Display
@@ -16,8 +15,8 @@ namespace RogueSheep.Display
         public GameTile(CP437Glyph s, Color foreground, Color background)
         {
             Glyph = s;
-            this.Foreground = foreground;
-            this.Background = background;
+            Foreground = foreground;
+            Background = background;
         }
     }
 }
