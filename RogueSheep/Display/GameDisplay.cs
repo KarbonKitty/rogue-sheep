@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -28,28 +27,17 @@ namespace RogueSheep.Display
             Clear();
         }
 
-        public void Draw(GameTile tile, Point2i position)
-        {
-            var i = VectorToIndex(position);
-            this.tiles[i] = tile;
-        }
+        public void Draw(IPresentable presentable, Point2i position) => Draw(presentable.Presentation, position);
 
-        public void Draw(IList<GameTile> tiles, Point2i position)
-        {
-            var i = VectorToIndex(position);
-            foreach (var tile in tiles)
-            {
-                this.tiles[i++] = tile;
-            }
-        }
+        public void Draw(IList<IPresentable> presentables, Point2i position) => Draw(presentables.Select(p => p.Presentation).ToList(), position);
 
-        public void Draw(IList<GameTile> tiles, Point2i position, int lineLength)
+        public void Draw(IList<IPresentable> presentables, Point2i position, int lineLength)
         {
             var i = VectorToIndex(position);
             var column = 0;
-            foreach (var tile in tiles)
+            foreach (var presentable in presentables)
             {
-                this.tiles[i++] = tile;
+                this.tiles[i++] = presentable.Presentation;
                 column++;
                 if (column == lineLength)
                 {
@@ -86,6 +74,21 @@ namespace RogueSheep.Display
             for (var i = 0; i < tiles.Length; i++)
             {
                 tiles[i] = new GameTile(CP437Glyph.Empty);
+            }
+        }
+
+        private void Draw(GameTile tile, Point2i position)
+        {
+            var i = VectorToIndex(position);
+            tiles[i] = tile;
+        }
+
+        private void Draw(IList<GameTile> gameTiles, Point2i position)
+        {
+            var i = VectorToIndex(position);
+            foreach (var gameTile in gameTiles)
+            {
+                tiles[i++] = gameTile;
             }
         }
 
