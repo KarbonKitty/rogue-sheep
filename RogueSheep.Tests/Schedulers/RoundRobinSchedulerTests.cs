@@ -22,5 +22,32 @@ namespace RogueSheep.Tests
             Assert.That(Third, Is.EqualTo(scheduler.Next()));
             Assert.That(First, Is.EqualTo(scheduler.Next()));
         }
+
+        [Test]
+        public void RoundRobinScheduler_Next_ThrowsWhenEmpty()
+        {
+            // Arrange
+            var scheduler = new RoundRobinScheduler<string>();
+
+            //Act & Assert
+            Assert.That(scheduler.Next, Throws.Exception);
+        }
+
+        [Test]
+        public void RoundRobinScheduler_Remove_RemovesItem()
+        {
+            // Arrange
+            var scheduler = new RoundRobinScheduler<string>();
+            scheduler.Add(First, Second);
+
+            // Act
+            scheduler.Next();
+            scheduler.Next();
+            scheduler.Remove(First);
+            var value = scheduler.Next();
+
+            // Assert
+            Assert.That(value, Is.SameAs(Second));
+        }
     }
 }
