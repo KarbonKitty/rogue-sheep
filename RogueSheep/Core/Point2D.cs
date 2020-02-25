@@ -32,10 +32,7 @@ namespace RogueSheep
             Y = original.Y;
         }
 
-        public Point2i Transform(Direction dir)
-        {
-            return new Point2i(this.X + transformations[dir].x, this.Y + transformations[dir].y);
-        }
+        public Point2i Transform(Direction dir) => new Point2i(this.X + transformations[dir].x, this.Y + transformations[dir].y);
 
         public static implicit operator Point2i((int x, int y) t) => new Point2i(t.x, t.y);
         public static implicit operator Point2i(Vector2i vector) => new Point2i(vector.X, vector.Y);

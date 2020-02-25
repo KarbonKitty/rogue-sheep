@@ -25,6 +25,14 @@ namespace RogueSheep.Maps
             return GetViewportImpl(size, FindOffsetForViewport(size, center));
         }
 
+        public bool IsAvailableForMove(Point2i position) => IsInBounds(position) && IsPassable(position) && !Actors.Any(b => b.Position == position);
+
+        public bool IsTransparent(Point2i position) => Tiles[PositionToIndex(position)].Transparent;
+
+        public Point2i PositionOf(T actor) => Actors.Single(a => a.Equals(actor)).Position;
+
+        protected virtual bool IsPassable(Point2i position) => Tiles[PositionToIndex(position)].Passable;
+
         private Point2i FindOffsetForViewport(Point2i size, Point2i center)
         {
             var attemptedLeft = center.X - (size.X / 2);
@@ -67,15 +75,7 @@ namespace RogueSheep.Maps
 
         private bool IsInBounds(Point2i position) => position.X >= 0 && position.X < Size.X && position.Y >= 0 && position.Y < Size.Y;
 
-        public bool IsAvailableForMove(Point2i position) => IsInBounds(position) && IsPassable(position) && !Actors.Any(b => b.Position == position);
-
-        protected virtual bool IsPassable(Point2i position) => Tiles[PositionToIndex(position)].Passable;
-
         private int PositionToIndex(Point2i position) => (position.Y * Size.X) + position.X;
-
-        public bool IsTransparent(Point2i position) => Tiles[PositionToIndex(position)].Transparent;
-
-        public Point2i PositionOf(T actor) => Actors.Single(a => a.Equals(actor)).Position;
 
         private bool IsInBounds(Point2i position, Point2i offset, Point2i size)
         {
