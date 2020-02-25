@@ -1,6 +1,4 @@
-using System;
-using Xunit;
-using RogueSheep;
+using NUnit.Framework;
 using RogueSheep.Schedulers;
 
 namespace RogueSheep.Tests
@@ -11,7 +9,7 @@ namespace RogueSheep.Tests
         private const string Second = "second";
         private const string Third = "third";
 
-        [Fact]
+        [Test]
         public void RoundRobinScheduler_KeepsSequence()
         {
             // Arrange
@@ -19,10 +17,10 @@ namespace RogueSheep.Tests
             scheduler.Add(First, Second, Third);
 
             // Act & Assert
-            Assert.Equal(First, scheduler.Next());
-            Assert.Equal(Second, scheduler.Next());
-            Assert.Equal(Third, scheduler.Next());
-            Assert.Equal(First, scheduler.Next());
+            Assert.That(First, Is.EqualTo(scheduler.Next()));
+            Assert.That(Second, Is.EqualTo(scheduler.Next()));
+            Assert.That(Third, Is.EqualTo(scheduler.Next()));
+            Assert.That(First, Is.EqualTo(scheduler.Next()));
         }
     }
 }

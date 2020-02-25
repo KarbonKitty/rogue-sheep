@@ -52,6 +52,14 @@ namespace RogueSheep
         //     => index < Length ? this[index] : defaultValue;
 
         private T TryGetValue((int x, int y) index, T defaultValue = default)
-            => (index.y * Size.X) + index.x < Length ? this[index] : defaultValue;
+        {
+            if (index.x < 0 || index.y < 0)
+            {
+                return defaultValue;
+            }
+
+            var i = (index.y * Size.X) + index.x;
+            return (i < Length && i >= 0) ? this[index] : defaultValue;
+        }
     }
 }
