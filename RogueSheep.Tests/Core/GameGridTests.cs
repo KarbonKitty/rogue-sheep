@@ -26,7 +26,7 @@ namespace RogueSheep.Tests
         }
 
         [Test]
-        public void GameGrid_GetNeighborhood_ReturnDefaultValueWhenOutOfBounds()
+        public void GameGrid_GetNeighborhood_ReturnDefaultValueWhenOutOfBounds_Inclusive()
         {
             // Arrange
             var grid = new GameGrid<int>((2, 2));
@@ -36,10 +36,30 @@ namespace RogueSheep.Tests
             }
 
             // Act
-            var value = grid.GetNeighborhood((0, 0), 5);
+            var value = grid.GetNeighborhood((0, 0), defaultValue: 5, inclusive: true);
 
             // Assert
             Assert.That(value, Has.Exactly(1).EqualTo(1));
+            Assert.That(value, Has.Exactly(1).EqualTo(2));
+            Assert.That(value, Has.Exactly(1).EqualTo(3));
+            Assert.That(value, Has.Exactly(1).EqualTo(4));
+            Assert.That(value, Has.Exactly(5).EqualTo(5));
+        }
+
+        [Test]
+        public void GameGrid_GetNeighborhood_ReturnDefaultValueWhenOutOfBounds_Exclusive()
+        {
+            // Arrange
+            var grid = new GameGrid<int>((2, 2));
+            for (var i = 0; i < grid.Length; i++)
+            {
+                grid[i] = i + 1;
+            }
+
+            // Act
+            var value = grid.GetNeighborhood((0, 0), defaultValue: 5, inclusive: false);
+
+            // Assert
             Assert.That(value, Has.Exactly(1).EqualTo(2));
             Assert.That(value, Has.Exactly(1).EqualTo(3));
             Assert.That(value, Has.Exactly(1).EqualTo(4));

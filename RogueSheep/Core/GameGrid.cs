@@ -24,16 +24,19 @@ namespace RogueSheep
             Size = size;
         }
 
-        public IEnumerable<T> GetNeighborhood(int index, T defaultValue = default)
+        public IEnumerable<T> GetNeighborhood(int index, T defaultValue = default, bool inclusive = false)
         {
             var position = (index % Size.X, index / Size.Y);
-            return GetNeighborhood(position, defaultValue);
+            return GetNeighborhood(position, defaultValue, inclusive);
         }
 
-        public IEnumerable<T> GetNeighborhood((int x, int y) position, T defaultValue = default)
+        public IEnumerable<T> GetNeighborhood((int x, int y) position, T defaultValue = default, bool inclusive = false)
         {
             var (x, y) = position;
-            yield return TryGetValue((x, y), defaultValue);
+            if (inclusive)
+            {
+                yield return TryGetValue((x, y), defaultValue);
+            }
             yield return TryGetValue((x - 1, y), defaultValue);
             yield return TryGetValue((x + 1, y), defaultValue);
             yield return TryGetValue((x, y - 1), defaultValue);
