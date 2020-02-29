@@ -5,14 +5,14 @@ namespace RogueSheep.Display
     public class GameTile
     {
         public CP437Glyph Glyph { get; }
-        public Color Foreground { get; }
-        public Color Background { get; }
+        public RogueColor Foreground { get; }
+        public RogueColor Background { get; }
 
         public GameTile(CP437Glyph s) : this(s, Color.White, Color.Black) { }
 
-        public GameTile(CP437Glyph s, Color foreground) : this(s, foreground, Color.Black) { }
+        public GameTile(CP437Glyph s, RogueColor foreground) : this(s, foreground, Color.Black) { }
 
-        public GameTile(CP437Glyph s, Color foreground, Color background)
+        public GameTile(CP437Glyph s, RogueColor foreground, RogueColor background)
         {
             Glyph = s;
             Foreground = foreground;
