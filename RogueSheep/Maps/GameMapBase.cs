@@ -18,6 +18,33 @@ namespace RogueSheep.Maps
             Actors = new List<T>().Concat(actors).ToList();
         }
 
+        public Point2i ClosestFreePosition(Point2i origin)
+        {
+            if (IsAvailableForMove(origin))
+            {
+                return origin;
+            }
+            var currentPoint = origin;
+            var ring = 0;
+            while (true)
+            {
+                ring++;
+                var steps = ring * 2;
+                currentPoint = currentPoint.Transform(Direction.NorthWest);
+                foreach (var dir in new[] { Direction.East, Direction.South, Direction.West, Direction.North })
+                {
+                    for (var i = 0; i < steps; i++)
+                    {
+                        if (IsAvailableForMove(currentPoint))
+                        {
+                            return currentPoint;
+                        }
+                        currentPoint = currentPoint.Transform(dir);
+                    }
+                }
+            }
+        }
+
         public IPresentable[] GetMap() => Tiles;
 
         public IPresentable[] GetViewport(Point2i size, Point2i center)
