@@ -15,8 +15,17 @@ namespace RogueSheep
             set => Array[i] = value;
         }
 
-        public T this[int x, int y] => Array[(y * Size.X) + x];
-        public T this[(int x, int y) t] => Array[(t.y * Size.X) + t.x];
+        public T this[int x, int y]
+        {
+            get => Array[(y * Size.X) + x];
+            set => Array[(y * Size.X) + x] = value;
+        }
+
+        public T this[(int x, int y) t]
+        {
+            get => Array[(t.y * Size.X) + t.x];
+            set => Array[(t.y * Size.X) + t.x] = value;
+        }
 
         public GameGrid(Point2i size)
         {

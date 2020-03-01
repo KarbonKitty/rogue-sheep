@@ -22,6 +22,7 @@ namespace RogueSheep.Tests
             }
 
             // Act & Assert
+            Assert.True(grid[x, y] == value);
             Assert.True(grid[(x, y)] == value);
         }
 
