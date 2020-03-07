@@ -13,5 +13,6 @@ namespace RogueSheep.Maps
         Point2i PositionOf(T actor);
         IPresentable[] GetViewport(Point2i size, Point2i center);
         IPresentable[] GetMap();
+        Point2i ClosestFreePosition(Point2i origin);
     }
 }
