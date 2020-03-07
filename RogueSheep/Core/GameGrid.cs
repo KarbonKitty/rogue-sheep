@@ -17,14 +17,20 @@ namespace RogueSheep
 
         public T this[int x, int y]
         {
-            get => Array[(y * Size.X) + x];
-            set => Array[(y * Size.X) + x] = value;
+            get => this[(x, y)];
+            set => this[(x, y)] = value;
         }
 
         public T this[(int x, int y) t]
         {
             get => Array[(t.y * Size.X) + t.x];
             set => Array[(t.y * Size.X) + t.x] = value;
+        }
+
+        public T this[Point2i p]
+        {
+            get => this[(p.X, p.Y)];
+            set => this[(p.X, p.Y)] = value;
         }
 
         public GameGrid(Point2i size)
@@ -39,39 +45,45 @@ namespace RogueSheep
             return GetNeighborhood(position, defaultValue, inclusive);
         }
 
+        public IEnumerable<T> GetNeighborhood(Point2i position, T defaultValue = default, bool inclusive = false)
+            => GetNeighborhood((position.X, position.Y), defaultValue, inclusive);
+
         public IEnumerable<T> GetNeighborhood((int x, int y) position, T defaultValue = default, bool inclusive = false)
         {
             var (x, y) = position;
             if (inclusive)
             {
-                yield return TryGetValue((x, y), defaultValue);
+                yield return GetValueOrDefault((x, y), defaultValue);
             }
-            yield return TryGetValue((x - 1, y), defaultValue);
-            yield return TryGetValue((x + 1, y), defaultValue);
-            yield return TryGetValue((x, y - 1), defaultValue);
-            yield return TryGetValue((x, y + 1), defaultValue);
-            yield return TryGetValue((x + 1, y + 1), defaultValue);
-            yield return TryGetValue((x + 1, y - 1), defaultValue);
-            yield return TryGetValue((x - 1, y + 1), defaultValue);
-            yield return TryGetValue((x - 1, y - 1), defaultValue);
+            yield return GetValueOrDefault((x - 1, y), defaultValue);
+            yield return GetValueOrDefault((x + 1, y), defaultValue);
+            yield return GetValueOrDefault((x, y - 1), defaultValue);
+            yield return GetValueOrDefault((x, y + 1), defaultValue);
+            yield return GetValueOrDefault((x + 1, y + 1), defaultValue);
+            yield return GetValueOrDefault((x + 1, y - 1), defaultValue);
+            yield return GetValueOrDefault((x - 1, y + 1), defaultValue);
+            yield return GetValueOrDefault((x - 1, y - 1), defaultValue);
         }
+
+        public Point2i IndexToPosition(int index) => (index % Size.X, index / Size.X);
+
+        public bool IsInBounds(int index) => index >= 0 && index < Length;
+        public bool IsInBounds(int x, int y) => x >= 0 && y >= 0 && x < Size.X && y < Size.Y;
+        public bool IsInBounds((int x, int y) t) => IsInBounds(t.x, t.y);
+        public bool IsInBounds(Point2i p) => IsInBounds(p.X, p.Y);
 
         public IEnumerator<T> GetEnumerator() => ((IEnumerable<T>)Array).GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => Array.GetEnumerator();
 
-        // private T TryGetValue(int index, T defaultValue = default)
-        //     => index < Length ? this[index] : defaultValue;
-
-        private T TryGetValue((int x, int y) index, T defaultValue = default)
+        private T GetValueOrDefault((int x, int y) index, T defaultValue = default)
         {
-            if (index.x < 0 || index.y < 0)
+            if (index.x < 0 || index.y < 0 || index.x >= Size.X || index.y >= Size.Y)
             {
                 return defaultValue;
             }
 
-            var i = (index.y * Size.X) + index.x;
-            return (i < Length && i >= 0) ? this[index] : defaultValue;
+            return this[(index.y * Size.X) + index.x];
         }
     }
 }
