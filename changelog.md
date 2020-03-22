@@ -15,3 +15,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Simple messaging system
 - `IGameMap` and related interfaces plus basic implementation as `GameMapBase`
 - basic map generators
+- Adam Milazzo's FoV algorithm implementation

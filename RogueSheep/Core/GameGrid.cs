@@ -39,6 +39,14 @@ namespace RogueSheep
             Size = size;
         }
 
+        public void Clear(T item)
+        {
+            for (var i = 0; i < Length; i++)
+            {
+                this[i] = item;
+            }
+        }
+
         public IEnumerable<T> GetNeighborhood(int index, T defaultValue = default, bool inclusive = false)
         {
             var position = (index % Size.X, index / Size.Y);
