@@ -8,10 +8,22 @@ namespace RogueSheep.Maps.Generation
     public class CellularAutomaton : IMapGenerator<bool>
     {
         private readonly PCGRandom rng;
+        private readonly CellularAutomatonOptions options;
 
-        public CellularAutomaton(PCGRandom rng)
+        public CellularAutomaton() : this(new CellularAutomatonOptions()) {}
+
+        public CellularAutomaton(PCGRandom rng) : this(rng, new CellularAutomatonOptions()) {}
+
+        public CellularAutomaton(CellularAutomatonOptions options)
+        {
+            this.rng = new PCGRandom((ulong)DateTime.Now.Ticks, 1);
+            this.options = options;
+        }
+
+        public CellularAutomaton(PCGRandom rng, CellularAutomatonOptions options)
         {
             this.rng = rng;
+            this.options = options;
         }
 
         public GameGrid<bool> Generate(Point2i size)
@@ -21,18 +33,26 @@ namespace RogueSheep.Maps.Generation
             // fill 50-50 with alive (true) and dead (false)
             for (var i = 0; i < mapDto.Length; i++)
             {
-                mapDto[i] = rng.Next(100) < 50;
+                mapDto[i] = rng.Next(100) < options.AliveProbabilityAtStart;
             }
 
             // generate a few steps
-            for (var s = 0; s < 4; s++)
+            for (var s = 0; s < options.NumberOfSteps; s++)
             {
                 mapDto = ProcessStep(mapDto);
             }
 
-            mapDto = EnsureWalled(mapDto);
+            if (options.EnsureWalled)
+            {
+                mapDto = EnsureWalled(mapDto);
+            }
 
-            return EnsureConnected(mapDto);
+            if (options.EnsureConnected)
+            {
+                mapDto = EnsureConnected(mapDto);
+            }
+
+            return mapDto;
         }
 
         private GameGrid<bool> ProcessStep(GameGrid<bool> mapDto)
@@ -42,11 +62,11 @@ namespace RogueSheep.Maps.Generation
             for (var i = 0; i < mapDto.Length; i++)
             {
                 var neighborCount = mapDto.GetNeighborhood(i, true, false).Count(c => c);
-                if (mapDto[i] && neighborCount >= 4)
+                if (mapDto[i] && neighborCount >= options.NeighborCountToKeepAlive)
                 {
                     newGeneration[i] = true;
                 }
-                else if (!mapDto[i] && neighborCount >= 5)
+                else if (!mapDto[i] && neighborCount >= options.NeighborCountToMakeAlive)
                 {
                     newGeneration[i] = true;
                 }
@@ -175,7 +195,7 @@ namespace RogueSheep.Maps.Generation
             return newRegion;
         }
 
-        public List<Point2i> DrunkardWalk<T>(GameGrid<T> grid, Point2i origin, Point2i target)
+        private List<Point2i> DrunkardWalk<T>(GameGrid<T> grid, Point2i origin, Point2i target)
         {
             var walk = new List<Point2i>();
 
