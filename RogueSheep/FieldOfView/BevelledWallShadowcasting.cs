@@ -26,6 +26,27 @@ namespace RogueSheep.FieldOfView
             return visibilityGrid;
         }
 
+        public GameGrid<bool> Compute(Point2i origin, int rangeLimit, VisibilityAngle angle, Direction direction)
+        {
+            var startingOctant = ((int)direction) - 1;
+            var width = angle switch {
+                VisibilityAngle.HalfCircle => 2,
+                VisibilityAngle.QuarterCircle => 1,
+                _ => throw new ArgumentException(nameof(angle))
+            };
+
+            var rightmostOctant = startingOctant + width;
+            var leftmostOctant = startingOctant - width;
+
+            var visibilityGrid = new GameGrid<bool>(_transparencyGrid.Size);
+            visibilityGrid[origin] = true;
+            for (int octant = leftmostOctant; octant < rightmostOctant; octant++)
+            {
+                Compute(visibilityGrid, octant >= 0 ? (uint)octant : (uint)(8 + octant), origin, rangeLimit, 1, new Slope(1, 1), new Slope(0, 1));
+            }
+            return visibilityGrid;
+        }
+
         private struct Slope // represents the slope Y/X as a rational number
         {
             public uint X { get; }

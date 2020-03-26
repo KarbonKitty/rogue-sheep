@@ -3,13 +3,13 @@ namespace RogueSheep
     public enum Direction
     {
         None,
-        North,
-        South,
         East,
-        West,
         NorthEast,
+        North,
         NorthWest,
+        West,
+        SouthWest,
+        South,
         SouthEast,
-        SouthWest
     }
 }
