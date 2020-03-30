@@ -18,5 +18,12 @@ namespace RogueSheep.Display
             Foreground = foreground;
             Background = background;
         }
+
+        public GameTile(GameTile toBeCloned)
+        {
+            Glyph = toBeCloned.Glyph;
+            Foreground = toBeCloned.Foreground;
+            Background = toBeCloned.Background;
+        }
     }
 }

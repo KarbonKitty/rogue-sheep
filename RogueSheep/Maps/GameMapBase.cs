@@ -12,7 +12,8 @@ namespace RogueSheep.Maps
         protected virtual IMapTile[] Tiles { get; }
 
         public GameGrid<bool> TransparencyGrid { get; }
-        public IPresentable InvisibleTile { get; }
+
+        protected GameGrid<GameTile> MapMemory { get; }
 
         protected GameMapBase(IMapTile[] tiles, int width, IEnumerable<T> actors, IPresentable invisibleTile)
         {
@@ -27,7 +28,8 @@ namespace RogueSheep.Maps
                 TransparencyGrid[i++] = tile.Transparent;
             }
 
-            InvisibleTile = invisibleTile;
+            MapMemory = new GameGrid<GameTile>(Size);
+            MapMemory.Clear(invisibleTile.Presentation);
         }
 
         public Point2i ClosestFreePosition(Point2i origin)
@@ -59,14 +61,14 @@ namespace RogueSheep.Maps
 
         public IPresentable[] GetMap() => Tiles;
 
-        public IPresentable[] GetViewport(Point2i size, Point2i center)
+        public GameTile[] GetViewport(Point2i size, Point2i center)
         {
             var fullVisibility = new GameGrid<bool>(Size);
             fullVisibility.Clear(true);
             return GetViewportImpl(size, FindOffsetForViewport(size, center), fullVisibility);
         }
 
-        public IPresentable[] GetMaskedViewport(Point2i size, Point2i center, GameGrid<bool> visibilityGrid)
+        public GameTile[] GetMaskedViewport(Point2i size, Point2i center, GameGrid<bool> visibilityGrid)
             => GetViewportImpl(size, FindOffsetForViewport(size, center), visibilityGrid);
 
         public bool IsAvailableForMove(Point2i position) => IsInBounds(position) && IsPassable(position) && !Actors.Any(b => b.Position == position);
@@ -94,29 +96,40 @@ namespace RogueSheep.Maps
             return (realLeft, realTop);
         }
 
-        private IPresentable[] GetViewportImpl(Point2i size, Point2i offset, GameGrid<bool> visibilityGrid)
+        private GameTile[] GetViewportImpl(Point2i size, Point2i offset, GameGrid<bool> visibilityGrid)
         {
-            var viewport = new IPresentable[size.X * size.Y];
+            FillMapMemory(visibilityGrid);
+            var viewport = new GameTile[size.X * size.Y];
             for (var i = 0; i < size.X; i++)
             {
                 for (var j = 0; j < size.Y; j++)
                 {
                     int viewportIndex = j * size.X + i;
                     int mapIndex = ((j + offset.Y) * Size.X) + i + offset.X;
-                    viewport[viewportIndex] = visibilityGrid[mapIndex] ? Tiles[mapIndex] : InvisibleTile;
+                    viewport[viewportIndex] = visibilityGrid[mapIndex] ? Tiles[mapIndex].Presentation : MapMemory[mapIndex];
                 }
             }
 
-            // TODO: create IDrawable interface or something similar?
             foreach (var a in Actors)
             {
                 if (visibilityGrid[a.Position] && IsInBounds(a.Position, offset, size))
                 {
                     var viewportPosition = a.Position - offset;
-                    viewport[(viewportPosition.Y * size.X) + viewportPosition.X] = a;
+                    viewport[(viewportPosition.Y * size.X) + viewportPosition.X] = a.Presentation;
                 }
             }
             return viewport;
+        }
+
+        private void FillMapMemory(GameGrid<bool> visibilityGrid)
+        {
+            for (var i = 0; i < visibilityGrid.Length; i++)
+            {
+                if (visibilityGrid[i])
+                {
+                    MapMemory[i] = new GameTile(Tiles[i].Presentation.Glyph, Tiles[i].Presentation.Foreground.ToGrayscale(), Tiles[i].Presentation.Background);
+                }
+            }
         }
 
         private bool IsInBounds(Point2i position) => position.X >= 0 && position.X < Size.X && position.Y >= 0 && position.Y < Size.Y;

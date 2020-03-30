@@ -77,13 +77,13 @@ namespace RogueSheep.Display
             }
         }
 
-        private void Draw(GameTile tile, Point2i position)
+        public void Draw(GameTile tile, Point2i position)
         {
             var i = VectorToIndex(position);
             tiles[i] = tile;
         }
 
-        private void Draw(IList<GameTile> gameTiles, Point2i position)
+        public void Draw(IList<GameTile> gameTiles, Point2i position)
         {
             var i = VectorToIndex(position);
             foreach (var gameTile in gameTiles)
