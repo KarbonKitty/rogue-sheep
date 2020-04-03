@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `GameDisplay` and related infrastructure classes
 - `PCGRandom` class and helper to make the interface more System.Random-like
+- multistream RNG helper
 - `IScheduler` interface and `RoundRobinScheduler` implementation
 - basic 2D geometry structs and color structs
 - Simple messaging system

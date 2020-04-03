@@ -7,20 +7,20 @@ namespace RogueSheep.Maps.Generation
 {
     public class CellularAutomaton : IMapGenerator<bool>
     {
-        private readonly PCGRandom rng;
+        private readonly PCGRandomMinimal rng;
         private readonly CellularAutomatonOptions options;
 
         public CellularAutomaton() : this(new CellularAutomatonOptions()) {}
 
-        public CellularAutomaton(PCGRandom rng) : this(rng, new CellularAutomatonOptions()) {}
+        public CellularAutomaton(PCGRandomMinimal rng) : this(rng, new CellularAutomatonOptions()) {}
 
         public CellularAutomaton(CellularAutomatonOptions options)
         {
-            this.rng = new PCGRandom((ulong)DateTime.Now.Ticks, 1);
+            this.rng = new PCGRandomMinimal((ulong)DateTime.Now.Ticks, 1);
             this.options = options;
         }
 
-        public CellularAutomaton(PCGRandom rng, CellularAutomatonOptions options)
+        public CellularAutomaton(PCGRandomMinimal rng, CellularAutomatonOptions options)
         {
             this.rng = rng;
             this.options = options;
@@ -124,9 +124,9 @@ namespace RogueSheep.Maps.Generation
                 var endingRegion = regionList.Last().Value;
 
                 // select random starting points in both
-                var startingPoint = startingRegion[rng.NextInt(startingRegion.Count)];
+                var startingPoint = startingRegion[rng.Next(startingRegion.Count)];
                 var regionNumber = regionMap[startingPoint];
-                var endingPoint = endingRegion[rng.NextInt(endingRegion.Count)];
+                var endingPoint = endingRegion[rng.Next(endingRegion.Count)];
                 var endingRegionNumber = regionMap[endingPoint];
 
                 // join them by random walk, removing walls from mapDto
@@ -217,7 +217,7 @@ namespace RogueSheep.Maps.Generation
 
                 var totalWeight = weightMinusX + weightMinusY + weightPlusX + weightPlusY;
 
-                var roll = rng.NextInt(totalWeight) + 1;
+                var roll = rng.Next(totalWeight) + 1;
                 var runningTotal = weightPlusX;
                 Point2i testPoint;
                 if (roll <= runningTotal)

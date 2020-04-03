@@ -7,7 +7,7 @@ namespace RogueSheep.FieldOfView
     public class BeveledWallShadowcastingTests
     {
         [Test]
-        //[Ignore("Sandbox")]
+        [Ignore("Sandbox")]
         public void Sandbox()
         {
             var transparencyGrid = new GameGrid<bool>((50, 50));

@@ -2,6 +2,7 @@ using System;
 
 namespace RogueSheep
 {
+    // TODO: allow for various distances
     public static class GameGridExtensions
     {
         public static Point2i ClosestPosition<T>(this GameGrid<T> grid, Point2i origin, Func<GameGrid<T>, Point2i, bool> predicate)

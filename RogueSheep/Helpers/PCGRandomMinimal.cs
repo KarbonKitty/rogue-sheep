@@ -22,18 +22,18 @@ namespace RogueSheep.Helpers
         {
             state = 0;
             stream = initStream << 1 | 1;
-            Next();
+            Step();
             state += initState;
-            Next();
+            Step();
         }
 
-        public uint Next()
+        public uint Step()
         {
             ulong oldState = state;
             state = (oldState * 6364136223846793005) + stream;
             uint xorshifted = (uint)(((oldState >> 18) ^ oldState) >> 27);
             uint rot = (uint)(oldState >> 59);
-            return (xorshifted >> (int)rot) | (xorshifted << ((int)(-rot) & 31));
+            return (xorshifted >> (int)rot) | (xorshifted << ((int)-rot & 31));
         }
     }
 }
