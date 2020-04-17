@@ -1,26 +1,26 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using RogueSheep.Helpers;
+using RogueSheep.RandomNumbers;
 
 namespace RogueSheep.Maps.Generation
 {
     public class CellularAutomaton : IMapGenerator<bool>
     {
-        private readonly PCGRandomMinimal rng;
+        private readonly IRandom rng;
         private readonly CellularAutomatonOptions options;
 
         public CellularAutomaton() : this(new CellularAutomatonOptions()) {}
 
-        public CellularAutomaton(PCGRandomMinimal rng) : this(rng, new CellularAutomatonOptions()) {}
+        public CellularAutomaton(IRandom rng) : this(rng, new CellularAutomatonOptions()) {}
 
         public CellularAutomaton(CellularAutomatonOptions options)
         {
-            this.rng = new PCGRandomMinimal((ulong)DateTime.Now.Ticks, 1);
+            this.rng = new PCGRandom();
             this.options = options;
         }
 
-        public CellularAutomaton(PCGRandomMinimal rng, CellularAutomatonOptions options)
+        public CellularAutomaton(IRandom rng, CellularAutomatonOptions options)
         {
             this.rng = rng;
             this.options = options;

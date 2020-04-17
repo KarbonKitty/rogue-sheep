@@ -1,4 +1,4 @@
-namespace RogueSheep.Helpers
+namespace RogueSheep.RandomNumbers
 {
     /*
     * PCG Random Number Generation for C#

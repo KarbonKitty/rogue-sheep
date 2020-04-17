@@ -1,12 +1,34 @@
 using System;
 
-namespace RogueSheep.Helpers
+namespace RogueSheep.RandomNumbers
 {
-    public static class PCGRandomExtensions
+    public class PCGRandom : IRandom
     {
-        public static int Next(this PCGRandomMinimal pcg) => (int)((pcg.Step() << 1) >> 1);
+        private readonly PCGRandomMinimal inner;
 
-        public static int Next(this PCGRandomMinimal pcg, int upperLimit)
+        public PCGRandom()
+        {
+            inner = new PCGRandomMinimal(Seeder.GetSeed(), 1);
+        }
+
+        public PCGRandom(PCGRandomMinimal generator)
+        {
+            inner = generator;
+        }
+
+        public PCGRandom(ulong seed)
+        {
+            inner = new PCGRandomMinimal(seed, 1);
+        }
+
+        public PCGRandom(ulong seed, ulong stream)
+        {
+            inner = new PCGRandomMinimal(seed, stream);
+        }
+
+        public int Next() => (int)((inner.Step() << 1) >> 1);
+
+        public int Next(int upperLimit)
         {
             if (upperLimit < 0)
             {
@@ -21,7 +43,7 @@ namespace RogueSheep.Helpers
             uint threshold = (uint.MaxValue - (uint)upperLimit) % (uint)upperLimit;
             while (true)
             {
-                uint next = pcg.Step();
+                uint next = inner.Step();
                 if (next > threshold)
                 {
                     return (int)(next % (uint)upperLimit);
@@ -29,7 +51,7 @@ namespace RogueSheep.Helpers
             }
         }
 
-        public static int Next(this PCGRandomMinimal pcg, int lowerLimit, int upperLimit)
+        public int Next(int lowerLimit, int upperLimit)
         {
             if (lowerLimit > upperLimit)
             {
@@ -41,16 +63,16 @@ namespace RogueSheep.Helpers
                 return lowerLimit;
             }
 
-            return pcg.Next(upperLimit - lowerLimit) + lowerLimit;
+            return Next(upperLimit - lowerLimit) + lowerLimit;
         }
 
-        public static double NextDouble(this PCGRandomMinimal pcg)
+        public double NextDouble()
         {
             int exponent = -32;
             ulong significand;
             int shift;
 
-            while ((significand = pcg.Step()) == 0)
+            while ((significand = inner.Step()) == 0)
             {
                 exponent -= 32;
             }
@@ -60,7 +82,7 @@ namespace RogueSheep.Helpers
             {
                 exponent -= shift;
                 significand <<= shift;
-                significand |= pcg.Step() >> (32 - shift);
+                significand |= inner.Step() >> (32 - shift);
             }
 
             significand |= 1;
