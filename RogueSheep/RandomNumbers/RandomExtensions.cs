@@ -77,5 +77,41 @@ namespace RogueSheep.RandomNumbers
 
             throw new InvalidOperationException("Impossible!");
         }
+
+        public static T SelectRandomElementWithWeight<T>(this IRandom rng, IDictionary<T, int> dictionary)
+        {
+            var totalWeight = dictionary.Sum(kvp => kvp.Value);
+
+            var randomSelection = rng.Next(totalWeight);
+            var runningTotal = 0;
+            foreach (var kvp in dictionary)
+            {
+                runningTotal += kvp.Value;
+                if (runningTotal >= randomSelection)
+                {
+                    return kvp.Key;
+                }
+            }
+
+            throw new Exception("Impossible!");
+        }
+
+        public static T SelectRandomElementWithWeight<T>(this IRandom rng, ICollection<(int weight, T item)> tupleCollection)
+        {
+            var totalWeight = tupleCollection.Sum(t => t.weight);
+
+            var randomSelection = rng.Next(totalWeight);
+            var runningTotal = 0;
+            foreach (var (weight, item) in tupleCollection)
+            {
+                runningTotal += weight;
+                if (runningTotal >= randomSelection)
+                {
+                    return item;
+                }
+            }
+
+            throw new Exception("Impossible!");
+        }
     }
 }
