@@ -304,7 +304,7 @@ namespace RogueSheep.FieldOfView
                 case 6: nx += y; ny += x; break;
                 case 7: nx += x; ny += y; break;
             }
-            visibilityGrid[((int)nx, (int)ny)] = true;
+            visibilityGrid.TrySet(((int)nx, (int)ny), true);
         }
 
         private int GetDistance(int x, int y) => (int)Math.Sqrt(x * x + y * y);

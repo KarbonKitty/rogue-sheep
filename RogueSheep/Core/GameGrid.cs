@@ -39,12 +39,22 @@ namespace RogueSheep
             Size = size;
         }
 
-        public void Clear(T item)
+        public void Fill(T item)
         {
             for (var i = 0; i < Length; i++)
             {
                 this[i] = item;
             }
+        }
+
+        public bool TrySet(Point2i position, T value)
+        {
+            if (IsInBounds(position))
+            {
+                this[position] = value;
+                return true;
+            }
+            return false;
         }
 
         public IEnumerable<T> GetNeighborhood(int index, T defaultValue = default, bool inclusive = false)

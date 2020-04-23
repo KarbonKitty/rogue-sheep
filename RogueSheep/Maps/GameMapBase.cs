@@ -29,7 +29,7 @@ namespace RogueSheep.Maps
             }
 
             MapMemory = new GameGrid<GameTile>(Size);
-            MapMemory.Clear(invisibleTile.Presentation);
+            MapMemory.Fill(invisibleTile.Presentation);
         }
 
         public Point2i ClosestFreePosition(Point2i origin)
@@ -64,7 +64,7 @@ namespace RogueSheep.Maps
         public GameTile[] GetViewport(Point2i size, Point2i center)
         {
             var fullVisibility = new GameGrid<bool>(Size);
-            fullVisibility.Clear(true);
+            fullVisibility.Fill(true);
             return GetViewportImpl(size, FindOffsetForViewport(size, center), fullVisibility);
         }
 
