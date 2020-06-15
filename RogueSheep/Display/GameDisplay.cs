@@ -60,6 +60,12 @@ namespace RogueSheep.Display
         {
             for (var i = 0; i < tiles.Length; i++)
             {
+                var b = new Sprite(BackgroundTile.Tile)
+                {
+                    Position = IndexToVector(i),
+                    Color = tiles[i].Background
+                };
+                window.Draw(b);
                 var s = new Sprite(tilemap[tiles[i].Glyph])
                 {
                     Position = IndexToVector(i),
