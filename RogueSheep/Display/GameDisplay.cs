@@ -17,8 +17,8 @@ namespace RogueSheep.Display
 
         public GameDisplay(Point2i size, Point2i offset, ITilemapConfiguration tilemapConfiguration)
         {
-            this.fontWidth = tilemapConfiguration.SpriteWidth;
-            this.fontHeight = tilemapConfiguration.SpriteHeight;
+            fontWidth = tilemapConfiguration.SpriteWidth;
+            fontHeight = tilemapConfiguration.SpriteHeight;
             tilemap = new TilemapFactory().CreateTilemap(tilemapConfiguration);
             tiles = new GameTile[size.X * size.Y];
             Size = size;
@@ -26,6 +26,9 @@ namespace RogueSheep.Display
             Offset = offset;
             Clear();
         }
+
+        public void Draw(CP437Glyph glyph, Point2i position, RogueColor? foreground = null, RogueColor? background = null)
+            => Draw(new GameTile(glyph, foreground ?? RogueColor.White, background ?? RogueColor.Transparent), position);
 
         public void Draw(IPresentable presentable, Point2i position) => Draw(presentable.Presentation, position);
 

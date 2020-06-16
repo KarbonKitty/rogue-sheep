@@ -180,5 +180,6 @@ namespace RogueSheep
         public static readonly RogueColor WhiteSmoke = new RogueColor(245, 245, 245);
         public static readonly RogueColor Yellow = new RogueColor(255, 255, 0);
         public static readonly RogueColor YellowGreen = new RogueColor(154, 205, 50);
+        public static readonly RogueColor Transparent = new RogueColor(0, 0, 0, 0);
     }
 }
