@@ -1,5 +1,3 @@
-using SFML.Graphics;
-
 namespace RogueSheep.Display
 {
     public class GameTile
@@ -8,9 +6,9 @@ namespace RogueSheep.Display
         public RogueColor Foreground { get; }
         public RogueColor Background { get; }
 
-        public GameTile(CP437Glyph s) : this(s, Color.White, Color.Black) { }
+        public GameTile(CP437Glyph s) : this(s, RogueColor.White, RogueColor.Transparent) { }
 
-        public GameTile(CP437Glyph s, RogueColor foreground) : this(s, foreground, Color.Black) { }
+        public GameTile(CP437Glyph s, RogueColor foreground) : this(s, foreground, RogueColor.Transparent) { }
 
         public GameTile(CP437Glyph s, RogueColor foreground, RogueColor background)
         {
