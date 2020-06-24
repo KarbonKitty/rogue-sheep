@@ -4,6 +4,7 @@ namespace RogueSheep.Schedulers
 {
     public interface IScheduler<T>
     {
+        T Current();
         T Next();
         void Add(T item);
         void Add(params T[] items);

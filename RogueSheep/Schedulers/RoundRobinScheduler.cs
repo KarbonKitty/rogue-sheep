@@ -14,6 +14,21 @@ namespace RogueSheep.Schedulers
             list = new List<T>(32);
         }
 
+        public T Current()
+        {
+            if (list.Count == 0)
+            {
+                throw new InvalidOperationException("Current can only be called on non-empty scheduler");
+            }
+
+            if (lastIndex == -1)
+            {
+                lastIndex = 0;
+            }
+
+            return list[lastIndex];
+        }
+
         public T Next()
         {
             if (list.Count == 0)
