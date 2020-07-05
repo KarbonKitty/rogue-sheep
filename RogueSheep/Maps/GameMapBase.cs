@@ -84,7 +84,7 @@ namespace RogueSheep.Maps
 
         protected virtual bool IsPassable(Point2i position) => Tiles[PositionToIndex(position)].Passable;
 
-        private Point2i FindOffsetForViewport(Point2i size, Point2i center)
+        protected Point2i FindOffsetForViewport(Point2i size, Point2i center)
         {
             var attemptedLeft = center.X - (size.X / 2);
             var realLeft = attemptedLeft < 0 ? 0 : attemptedLeft;
@@ -101,7 +101,7 @@ namespace RogueSheep.Maps
             return (realLeft, realTop);
         }
 
-        private GameTile[] GetViewportImpl(Point2i size, Point2i offset, GameGrid<bool> visibilityGrid)
+        protected GameTile[] GetViewportImpl(Point2i size, Point2i offset, GameGrid<bool> visibilityGrid)
         {
             FillMapMemory(visibilityGrid);
             var viewport = new GameTile[size.X * size.Y];
@@ -126,7 +126,7 @@ namespace RogueSheep.Maps
             return viewport;
         }
 
-        private void FillMapMemory(GameGrid<bool> visibilityGrid)
+        protected void FillMapMemory(GameGrid<bool> visibilityGrid)
         {
             for (var i = 0; i < visibilityGrid.Length; i++)
             {
@@ -137,11 +137,11 @@ namespace RogueSheep.Maps
             }
         }
 
-        private bool IsInBounds(Point2i position) => position.X >= 0 && position.X < Size.X && position.Y >= 0 && position.Y < Size.Y;
+        protected bool IsInBounds(Point2i position) => position.X >= 0 && position.X < Size.X && position.Y >= 0 && position.Y < Size.Y;
 
-        private int PositionToIndex(Point2i position) => (position.Y * Size.X) + position.X;
+        protected int PositionToIndex(Point2i position) => (position.Y * Size.X) + position.X;
 
-        private bool IsInBounds(Point2i position, Point2i offset, Point2i size)
+        protected bool IsInBounds(Point2i position, Point2i offset, Point2i size)
         {
             var left = offset.X;
             var right = size.X + offset.X;
