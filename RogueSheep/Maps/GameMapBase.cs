@@ -4,22 +4,26 @@ using RogueSheep.Display;
 
 namespace RogueSheep.Maps
 {
-    public abstract class GameMapBase<T> : IGameMap<T> where T : IHasPosition, IPresentable
+    public abstract class GameMapBase<TObject, TActor> : IGameMap<TObject, TActor>
+        where TObject : IMapTile
+        where TActor : IHasPosition, IPresentable
     {
-        public IList<T> Actors { get; }
+        public IList<TActor> Actors { get; }
 
         public Point2i Size { get; }
-        protected virtual IMapTile[] Tiles { get; }
+        protected virtual TObject[] Tiles { get; }
 
         public GameGrid<bool> TransparencyGrid { get; }
 
-        protected GameGrid<GameTile> MapMemory { get; }
+        protected GameGrid<TObject> MapMemory { get; }
 
-        protected GameMapBase(IMapTile[] tiles, int width, IEnumerable<T> actors, IPresentable invisibleTile)
+        public IPresentable[] GetMap() => Tiles.Cast<IPresentable>().ToArray();
+
+        protected GameMapBase(TObject[] tiles, int width, IEnumerable<TActor> actors, TObject invisibleTile)
         {
             Tiles = tiles;
             Size = (width, tiles.Length / width);
-            Actors = new List<T>().Concat(actors).ToList();
+            Actors = new List<TActor>().Concat(actors).ToList();
 
             TransparencyGrid = new GameGrid<bool>(Size);
             var i = 0;
@@ -28,8 +32,8 @@ namespace RogueSheep.Maps
                 TransparencyGrid[i++] = tile.Transparent;
             }
 
-            MapMemory = new GameGrid<GameTile>(Size);
-            MapMemory.Fill(invisibleTile.Presentation);
+            MapMemory = new GameGrid<TObject>(Size);
+            MapMemory.Fill(invisibleTile);
         }
 
         public Point2i ClosestFreePosition(Point2i origin)
@@ -59,7 +63,8 @@ namespace RogueSheep.Maps
             }
         }
 
-        public IPresentable[] GetMap() => Tiles;
+        public TObject GetActualObject(Point2i p) => Tiles[PositionToIndex(p)];
+        public TObject GetObjectFromMemory(Point2i p) => MapMemory[PositionToIndex(p)];
 
         public GameTile[] GetViewport(Point2i size, Point2i center)
         {
@@ -75,7 +80,7 @@ namespace RogueSheep.Maps
 
         public bool IsTransparent(Point2i position) => Tiles[PositionToIndex(position)].Transparent;
 
-        public Point2i PositionOf(T actor) => Actors.Single(a => a.Equals(actor)).Position;
+        public Point2i PositionOf(TActor actor) => Actors.Single(a => a.Equals(actor)).Position;
 
         protected virtual bool IsPassable(Point2i position) => Tiles[PositionToIndex(position)].Passable;
 
@@ -106,7 +111,7 @@ namespace RogueSheep.Maps
                 {
                     int viewportIndex = j * size.X + i;
                     int mapIndex = ((j + offset.Y) * Size.X) + i + offset.X;
-                    viewport[viewportIndex] = visibilityGrid[mapIndex] ? Tiles[mapIndex].Presentation : MapMemory[mapIndex];
+                    viewport[viewportIndex] = visibilityGrid[mapIndex] ? Tiles[mapIndex].Presentation : MapMemory[mapIndex].Presentation.ToGrayscale();
                 }
             }
 
@@ -127,7 +132,7 @@ namespace RogueSheep.Maps
             {
                 if (visibilityGrid[i])
                 {
-                    MapMemory[i] = new GameTile(Tiles[i].Presentation.Glyph, Tiles[i].Presentation.Foreground.ToGrayscale(), Tiles[i].Presentation.Background);
+                    MapMemory[i] = Tiles[i];
                 }
             }
         }
