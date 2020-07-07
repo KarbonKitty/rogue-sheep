@@ -8,18 +8,6 @@ namespace RogueSheep
         public int X { get; }
         public int Y { get; }
 
-        private static readonly Dictionary<Direction, (int x, int y)> transformations = new Dictionary<Direction, (int x, int y)> {
-            { Direction.None, (0, 0) },
-            { Direction.North, (0, -1) },
-            { Direction.South, (0, 1) },
-            { Direction.West, (-1, 0) },
-            { Direction.East, (1, 0) },
-            { Direction.NorthEast, (1, -1) },
-            { Direction.NorthWest, (-1, -1) },
-            { Direction.SouthEast, (1, 1) },
-            { Direction.SouthWest, (-1, 1) }
-        };
-
         public Point2i(int x, int y)
         {
             X = x;
@@ -32,7 +20,7 @@ namespace RogueSheep
             Y = original.Y;
         }
 
-        public Point2i Transform(Direction dir) => new Point2i(this.X + transformations[dir].x, this.Y + transformations[dir].y);
+        public Point2i Transform(Direction dir) => this + dir.Vector();
 
         public static implicit operator Point2i((int x, int y) t) => new Point2i(t.x, t.y);
         public static implicit operator Point2i(Vector2i vector) => new Point2i(vector.X, vector.Y);
