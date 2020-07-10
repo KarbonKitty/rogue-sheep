@@ -26,7 +26,12 @@ namespace RogueSheep.FieldOfView
             return visibilityGrid;
         }
 
-        public GameGrid<bool> Compute(Point2i origin, int rangeLimit, VisibilityAngle angle, Direction direction)
+        public GameGrid<bool> Compute(
+            Point2i origin,
+            int rangeLimit,
+            VisibilityAngle angle,
+            Direction direction,
+            GameGrid<bool>? originalVisibilityGrid = null)
         {
             var startingOctant = ((int)direction) - 1;
             var width = angle switch {
@@ -38,7 +43,7 @@ namespace RogueSheep.FieldOfView
             var rightmostOctant = startingOctant + width;
             var leftmostOctant = startingOctant - width;
 
-            var visibilityGrid = new GameGrid<bool>(_transparencyGrid.Size);
+            var visibilityGrid = originalVisibilityGrid ?? new GameGrid<bool>(_transparencyGrid.Size);
             visibilityGrid[origin] = true;
             for (int octant = leftmostOctant; octant < rightmostOctant; octant++)
             {
