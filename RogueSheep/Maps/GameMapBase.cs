@@ -141,6 +141,8 @@ namespace RogueSheep.Maps
 
         protected int PositionToIndex(Point2i position) => (position.Y * Size.X) + position.X;
 
+        protected Point2i IndexToPosition(int index) => (index % Size.X, index / Size.X);
+
         protected bool IsInBounds(Point2i position, Point2i offset, Point2i size)
         {
             var left = offset.X;

@@ -36,6 +36,25 @@ namespace RogueSheep
         public bool Equals(Point2i gamePosition) => gamePosition.X == X && gamePosition.Y == Y;
 
         public override int GetHashCode() => (((17 * 23) + X) * 23) + Y;
+
+        public void Deconstruct(out int x, out int y)
+        {
+            x = X;
+            y = Y;
+        }
+
+        public Direction DirectionFromVector() => this switch
+        {
+            Point2i(0, -1) => Direction.North,
+            Point2i(0, 1) => Direction.South,
+            Point2i(-1, 0) => Direction.West,
+            Point2i(1, 0) => Direction.East,
+            Point2i(1, -1) => Direction.NorthEast,
+            Point2i(-1, -1) => Direction.NorthWest,
+            Point2i(1, 1) => Direction.SouthEast,
+            Point2i(-1, 1) => Direction.SouthWest,
+            _ => Direction.None
+        };
     }
 
     public struct Point2f
@@ -86,5 +105,24 @@ namespace RogueSheep
         public bool Equals(Point2f gamePosition) => gamePosition.X == X && gamePosition.Y == Y;
 
         public override int GetHashCode() => (int)((((17 * 23) + X) * 23) + Y);
+
+        public void Deconstruct(out float x, out float y)
+        {
+            x = X;
+            y = Y;
+        }
+
+        public Direction DirectionFromVector() => this switch
+        {
+            Point2f(0, -1) => Direction.North,
+            Point2f(0, 1) => Direction.South,
+            Point2f(-1, 0) => Direction.West,
+            Point2f(1, 0) => Direction.East,
+            Point2f(1, -1) => Direction.NorthEast,
+            Point2f(-1, -1) => Direction.NorthWest,
+            Point2f(1, 1) => Direction.SouthEast,
+            Point2f(-1, 1) => Direction.SouthWest,
+            _ => Direction.None
+        };
     }
 }
