@@ -60,6 +60,10 @@ namespace RogueSheep.Schedulers
             return list.Remove(item);
         }
 
-        public void Clear() => list.Clear();
+        public void Clear()
+        {
+            list.Clear();
+            lastIndex = -1;
+        }
     }
 }
